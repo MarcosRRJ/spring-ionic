@@ -41,4 +41,10 @@ public class CategoriaServiceImpl implements CategoriaService {
 		return null;
 	}
 
+	@Override
+	public Categoria gravar(Categoria categoria) {
+		categoria.setId(null);
+		return categoriaRepository.save(categoria);
+	}
+
 }

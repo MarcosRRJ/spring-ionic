@@ -9,4 +9,6 @@ public interface CategoriaService {
 	public List<Categoria> find();
 
 	public Categoria bucar(Integer id);
+
+	public Categoria gravar(Categoria categoria);
 }
