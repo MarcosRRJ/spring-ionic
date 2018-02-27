@@ -3,11 +3,13 @@ package com.cursospring.ionic.cursosi.serviceimpl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import com.cursospring.ionic.cursosi.model.Categoria;
 import com.cursospring.ionic.cursosi.repository.CategoriaRepository;
 import com.cursospring.ionic.cursosi.service.CategoriaService;
+import com.cursospring.ionic.cursosi.service.exceptions.DataIntegrityException;
 import com.cursospring.ionic.cursosi.service.exceptions.ObjectNotFoundException;
 
 @Service("categoriaService")
@@ -19,12 +21,7 @@ public class CategoriaServiceImpl implements CategoriaService {
 	@Override
 	public Categoria bucar(Integer id) {
 
-		Categoria categoria = categoriaRepository.findOne(id);
-
-		if (categoria == null) {
-			throw new ObjectNotFoundException(
-					"Objeto não encontrado! Id: " + id + ", tipo: " + Categoria.class.getName());
-		}
+		Categoria categoria = verificaSeENulo(id);
 
 		return categoria;
 	}
@@ -38,7 +35,7 @@ public class CategoriaServiceImpl implements CategoriaService {
 			throw new ObjectNotFoundException("Objetos não encontrado! tipo: " + Categoria.class.getName());
 		}
 
-		return null;
+		return categorias;
 	}
 
 	@Override
@@ -47,4 +44,30 @@ public class CategoriaServiceImpl implements CategoriaService {
 		return categoriaRepository.save(categoria);
 	}
 
+	@Override
+	public Categoria alterar(Categoria categoria) {
+		bucar(categoria.getId());
+		return categoriaRepository.save(categoria);
+	}
+
+	private Categoria verificaSeENulo(Integer id) {
+		Categoria categoria = categoriaRepository.findOne(id);
+
+		if (categoria == null) {
+			throw new ObjectNotFoundException(
+					"Objeto não encontrado! Id: " + id + ", tipo: " + Categoria.class.getName());
+		}
+		return categoria;
+	}
+
+	@Override
+	public void deleta(Integer id) {
+		bucar(id);
+		try {
+			categoriaRepository.delete(id);
+		} catch (DataIntegrityViolationException e) {
+			throw new DataIntegrityException("Não é possível deletar uma categoria que possue produtos");
+		}
+
+	}
 }

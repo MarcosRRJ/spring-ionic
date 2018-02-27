@@ -21,11 +21,11 @@ public class ClienteController {
 	private ClienteService clienteService;
 
 	@RequestMapping(method = RequestMethod.GET)
-	public ResponseEntity<?> listar() {
+	public ResponseEntity<List<Cliente>> listar() {
 
 		List<Cliente> clientes = clienteService.find();
 
-		return new ResponseEntity<>(clientes, HttpStatus.OK);
+		return ResponseEntity.ok(clientes);
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)

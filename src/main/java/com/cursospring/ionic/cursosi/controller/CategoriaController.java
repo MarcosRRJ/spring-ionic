@@ -1,7 +1,6 @@
 package com.cursospring.ionic.cursosi.controller;
 
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,27 +26,41 @@ public class CategoriaController {
 	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity<?> listar() {
 
-		List<Categoria> categorias = new ArrayList<>();
+		List<Categoria> categorias = categoriaService.find();
 
 		return new ResponseEntity<>(categorias, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
-	public ResponseEntity<?> bucar(@PathVariable Integer id) {
+	public ResponseEntity<Categoria> bucar(@PathVariable Integer id) {
 
 		Categoria categoria = categoriaService.bucar(id);
-		return new ResponseEntity<>(categoria, HttpStatus.OK);
+		return ResponseEntity.ok().body(categoria);
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<Void> gravar(@RequestBody Categoria categoria) {
 
 		Categoria novaCategoria = categoriaService.gravar(categoria);
-		URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
-				.path("/{id}").buildAndExpand(novaCategoria.getId())
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(novaCategoria.getId())
 				.toUri();
 
 		return ResponseEntity.created(uri).build();
 	}
 
+	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+	public ResponseEntity<Void> alterar(@RequestBody Categoria categoria, @PathVariable Integer id) {
+
+		categoria.setId(id);
+		categoria = categoriaService.alterar(categoria);
+
+		return ResponseEntity.noContent().build();
+	}
+
+	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+	public ResponseEntity<Void> deleta(@PathVariable Integer id) {
+
+		categoriaService.deleta(id);
+		return ResponseEntity.noContent().build();
+	}
 }

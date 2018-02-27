@@ -11,4 +11,8 @@ public interface CategoriaService {
 	public Categoria bucar(Integer id);
 
 	public Categoria gravar(Categoria categoria);
+
+	public Categoria alterar(Categoria categoria);
+
+	public void deleta(Integer id);
 }
