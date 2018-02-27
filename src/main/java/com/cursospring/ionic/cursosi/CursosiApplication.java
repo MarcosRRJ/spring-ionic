@@ -13,6 +13,7 @@ import com.cursospring.ionic.cursosi.model.Cidade;
 import com.cursospring.ionic.cursosi.model.Cliente;
 import com.cursospring.ionic.cursosi.model.Endereco;
 import com.cursospring.ionic.cursosi.model.Estado;
+import com.cursospring.ionic.cursosi.model.ItemPedido;
 import com.cursospring.ionic.cursosi.model.Pagamento;
 import com.cursospring.ionic.cursosi.model.PagamentoComBoleto;
 import com.cursospring.ionic.cursosi.model.PagamentoComCartao;
@@ -25,6 +26,7 @@ import com.cursospring.ionic.cursosi.repository.CidadeRepository;
 import com.cursospring.ionic.cursosi.repository.ClienteRepository;
 import com.cursospring.ionic.cursosi.repository.EnderecoRepository;
 import com.cursospring.ionic.cursosi.repository.EstadoRepository;
+import com.cursospring.ionic.cursosi.repository.ItemPedidoRepository;
 import com.cursospring.ionic.cursosi.repository.PagamentoRepository;
 import com.cursospring.ionic.cursosi.repository.PedidoRepository;
 import com.cursospring.ionic.cursosi.repository.ProdutoRepository;
@@ -55,6 +57,9 @@ public class CursosiApplication implements CommandLineRunner {
 	
 	@Autowired
 	private PagamentoRepository pagamentoRepository;
+	
+	@Autowired
+	private ItemPedidoRepository itemPedidoRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(CursosiApplication.class, args);
@@ -119,6 +124,20 @@ public class CursosiApplication implements CommandLineRunner {
 		
 		pedidoRepository.save(Arrays.asList(ped1,ped2));
 		pagamentoRepository.save(Arrays.asList(pagto1,pagto2));
+		
+		ItemPedido ip1 = new ItemPedido(ped1, p1, 0.00, 2000.0, 1);
+		ItemPedido ip2 = new ItemPedido(ped1, p3, 0.00, 80.0, 2);
+		ItemPedido ip3 = new ItemPedido(ped2, p2, 100.00, 800.0, 1);
+		
+		ped1.getItens().addAll(Arrays.asList(ip1, ip2));
+		ped2.getItens().addAll(Arrays.asList(ip3));
+		
+		p1.getItens().addAll(Arrays.asList(ip1));
+		p2.getItens().addAll(Arrays.asList(ip3));
+		p3.getItens().addAll(Arrays.asList(ip2));
+		
+		itemPedidoRepository.save(Arrays.asList(ip1,ip2,ip3));
+		
 		
 	}
 
