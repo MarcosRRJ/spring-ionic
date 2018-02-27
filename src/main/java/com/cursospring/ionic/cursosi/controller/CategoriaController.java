@@ -2,9 +2,9 @@ package com.cursospring.ionic.cursosi.controller;
 
 import java.net.URI;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.cursospring.ionic.cursosi.dto.CategoriaDTO;
 import com.cursospring.ionic.cursosi.model.Categoria;
 import com.cursospring.ionic.cursosi.service.CategoriaService;
 
@@ -24,11 +25,13 @@ public class CategoriaController {
 	private CategoriaService categoriaService;
 
 	@RequestMapping(method = RequestMethod.GET)
-	public ResponseEntity<?> listar() {
+	public ResponseEntity<List<CategoriaDTO>> listar() {
 
 		List<Categoria> categorias = categoriaService.find();
-
-		return new ResponseEntity<>(categorias, HttpStatus.OK);
+		List<CategoriaDTO> liesDto = categorias.stream()
+				.map(obj -> new CategoriaDTO(obj)).collect(Collectors.toList());
+		
+		return ResponseEntity.ok().body(liesDto);
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
