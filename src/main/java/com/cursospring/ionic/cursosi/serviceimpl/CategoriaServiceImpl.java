@@ -9,6 +9,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
+import com.cursospring.ionic.cursosi.dto.CategoriaDTO;
 import com.cursospring.ionic.cursosi.model.Categoria;
 import com.cursospring.ionic.cursosi.repository.CategoriaRepository;
 import com.cursospring.ionic.cursosi.service.CategoriaService;
@@ -78,5 +79,10 @@ public class CategoriaServiceImpl implements CategoriaService {
 	public Page<Categoria> listaPagina(Integer page, Integer linesPerPage, String orderBy, String direction) {
 		PageRequest pageRequest = new PageRequest(page, linesPerPage,Direction.valueOf(direction), orderBy);		
 		return categoriaRepository.findAll(pageRequest);
+	}
+	
+	public Categoria paraDTO(CategoriaDTO categoriaDTO){
+		return new Categoria(categoriaDTO.getId(), categoriaDTO.getNome());
+		
 	}
 }

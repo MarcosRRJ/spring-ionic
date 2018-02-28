@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.data.domain.Page;
 
+import com.cursospring.ionic.cursosi.dto.CategoriaDTO;
 import com.cursospring.ionic.cursosi.model.Categoria;
 
 public interface CategoriaService {
@@ -19,4 +20,6 @@ public interface CategoriaService {
 	public void deleta(Integer id);
 	
 	public Page<Categoria> listaPagina(Integer page, Integer linesPerPage, String orderBy, String direction);
+	
+	public Categoria paraDTO(CategoriaDTO categoriaDTO);
 }
