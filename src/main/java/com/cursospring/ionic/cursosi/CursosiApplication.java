@@ -51,13 +51,13 @@ public class CursosiApplication implements CommandLineRunner {
 
 	@Autowired
 	private ClienteRepository clienteRepository;
-	
+
 	@Autowired
 	private PedidoRepository pedidoRepository;
-	
+
 	@Autowired
 	private PagamentoRepository pagamentoRepository;
-	
+
 	@Autowired
 	private ItemPedidoRepository itemPedidoRepository;
 
@@ -70,19 +70,25 @@ public class CursosiApplication implements CommandLineRunner {
 
 		Categoria cat1 = new Categoria(null, "Informática");
 		Categoria cat2 = new Categoria(null, "Escritório");
+		Categoria cat3 = new Categoria(null, "Cama mesa e Banho");
+		Categoria cat4 = new Categoria(null, "Eletrônico");
+		Categoria cat5 = new Categoria(null, "Jardinagem");
+		Categoria cat6 = new Categoria(null, "Decoração");
+		Categoria cat7 = new Categoria(null, "Perfumaria");
 
 		Produto p1 = new Produto(null, "Computador", 2000.00);
 		Produto p2 = new Produto(null, "Impressora", 800.00);
 		Produto p3 = new Produto(null, "Mouse", 80.00);
 
 		cat1.getProdutos().addAll(Arrays.asList(p1, p2, p3));
+		
 		cat2.getProdutos().addAll(Arrays.asList(p2));
 
 		p1.getCategorias().addAll(Arrays.asList(cat1));
 		p2.getCategorias().addAll(Arrays.asList(cat1, cat2));
 		p3.getCategorias().addAll(Arrays.asList(cat1));
 
-		categoriaRepository.save(Arrays.asList(cat1, cat2));
+		categoriaRepository.save(Arrays.asList(cat1, cat2, cat3, cat4, cat5, cat6, cat7));
 		produtoRepository.save(Arrays.asList(p1, p2, p3));
 
 		Estado est1 = new Estado(null, "Minhas Gerais");
@@ -117,29 +123,28 @@ public class CursosiApplication implements CommandLineRunner {
 
 		Pagamento pagto1 = new PagamentoComCartao(null, EstadoPagamento.QUITADO, ped1, 6);
 		ped1.setPagamento(pagto1);
-		Pagamento pagto2 = new PagamentoComBoleto(null, EstadoPagamento.PENDENTE,  ped2, dft.parse("20/10/2017 00:00"), null);
+		Pagamento pagto2 = new PagamentoComBoleto(null, EstadoPagamento.PENDENTE, ped2, dft.parse("20/10/2017 00:00"),
+				null);
 		ped2.setPagamento(pagto2);
-		
-		cli1.getPedidos().addAll(Arrays.asList(ped1,ped2));
-		
-		pedidoRepository.save(Arrays.asList(ped1,ped2));
-		pagamentoRepository.save(Arrays.asList(pagto1,pagto2));
-		
+
+		cli1.getPedidos().addAll(Arrays.asList(ped1, ped2));
+
+		pedidoRepository.save(Arrays.asList(ped1, ped2));
+		pagamentoRepository.save(Arrays.asList(pagto1, pagto2));
+
 		ItemPedido ip1 = new ItemPedido(ped1, p1, 0.00, 2000.0, 1);
 		ItemPedido ip2 = new ItemPedido(ped1, p3, 0.00, 80.0, 2);
 		ItemPedido ip3 = new ItemPedido(ped2, p2, 100.00, 800.0, 1);
-		
+
 		ped1.getItens().addAll(Arrays.asList(ip1, ip2));
 		ped2.getItens().addAll(Arrays.asList(ip3));
-		
+
 		p1.getItens().addAll(Arrays.asList(ip1));
 		p2.getItens().addAll(Arrays.asList(ip3));
 		p3.getItens().addAll(Arrays.asList(ip2));
-		
-		itemPedidoRepository.save(Arrays.asList(ip1,ip2,ip3));
-		
-		
+
+		itemPedidoRepository.save(Arrays.asList(ip1, ip2, ip3));
+
 	}
 
 }
-
