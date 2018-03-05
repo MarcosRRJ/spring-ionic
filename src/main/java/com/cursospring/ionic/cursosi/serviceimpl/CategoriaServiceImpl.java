@@ -50,8 +50,13 @@ public class CategoriaServiceImpl implements CategoriaService {
 
 	@Override
 	public Categoria alterar(Categoria categoria) {
-		bucar(categoria.getId());
-		return categoriaRepository.save(categoria);
+		Categoria newCat = bucar(categoria.getId());
+		alterarData(newCat, categoria);
+		return categoriaRepository.save(newCat);
+	}
+
+	private void alterarData(Categoria newCat, Categoria categoria) {
+		newCat.setNome(categoria.getNome());
 	}
 
 	private Categoria verificaSeENulo(Integer id) {
