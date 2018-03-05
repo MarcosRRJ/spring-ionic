@@ -91,7 +91,7 @@ public class ClienteServiceImpl implements ClienteService {
 		try {
 			clienteRepository.delete(id);
 		} catch (DataIntegrityViolationException e) {
-			throw new DataIntegrityException("Não é possível deletar um cliente porque há entidades relacionadas");
+			throw new DataIntegrityException("Não é possível deletar um cliente porque há pedidos relacionadas");
 		}
 
 	}
