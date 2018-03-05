@@ -7,7 +7,9 @@ import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import com.cursospring.ionic.cursosi.model.Cliente;
+import com.cursospring.ionic.cursosi.service.validation.ClienteUpdate;
 
+@ClienteUpdate
 public class ClienteDTO implements Serializable {
 
 	private static final long serialVersionUID = 1L;
