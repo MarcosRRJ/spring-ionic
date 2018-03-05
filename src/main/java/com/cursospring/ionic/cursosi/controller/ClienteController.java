@@ -1,5 +1,6 @@
 package com.cursospring.ionic.cursosi.controller;
 
+import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -15,8 +16,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.cursospring.ionic.cursosi.dto.ClienteDTO;
+import com.cursospring.ionic.cursosi.dto.ClienteNewDTO;
 import com.cursospring.ionic.cursosi.model.Cliente;
 import com.cursospring.ionic.cursosi.service.ClienteService;
 
@@ -32,6 +35,17 @@ public class ClienteController {
 
 		Cliente cliente = clienteService.bucar(id);
 		return new ResponseEntity<>(cliente, HttpStatus.OK);
+	}
+	
+	@RequestMapping(method = RequestMethod.POST)
+	public ResponseEntity<Void> gravar(@RequestBody @Valid ClienteNewDTO clienteNewDTO) {
+		Cliente obj = clienteService.paraDTO(clienteNewDTO);
+		
+		obj = clienteService.gravar(obj);
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId())
+				.toUri();
+
+		return ResponseEntity.created(uri).build();
 	}
 	
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)

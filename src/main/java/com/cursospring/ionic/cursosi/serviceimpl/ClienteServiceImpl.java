@@ -10,8 +10,14 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import com.cursospring.ionic.cursosi.dto.ClienteDTO;
+import com.cursospring.ionic.cursosi.dto.ClienteNewDTO;
+import com.cursospring.ionic.cursosi.model.Cidade;
 import com.cursospring.ionic.cursosi.model.Cliente;
+import com.cursospring.ionic.cursosi.model.Endereco;
+import com.cursospring.ionic.cursosi.model.enums.TipoCliente;
+import com.cursospring.ionic.cursosi.repository.CidadeRepository;
 import com.cursospring.ionic.cursosi.repository.ClienteRepository;
+import com.cursospring.ionic.cursosi.repository.EnderecoRepository;
 import com.cursospring.ionic.cursosi.service.ClienteService;
 import com.cursospring.ionic.cursosi.service.exceptions.DataIntegrityException;
 import com.cursospring.ionic.cursosi.service.exceptions.ObjectNotFoundException;
@@ -21,6 +27,12 @@ public class ClienteServiceImpl implements ClienteService {
 
 	@Autowired
 	private ClienteRepository clienteRepository;
+
+	@Autowired
+	private CidadeRepository cidadeRepository;
+	
+	@Autowired
+	private EnderecoRepository enderecoRepository;
 
 	@Override
 	public Cliente bucar(Integer id) {
@@ -47,15 +59,24 @@ public class ClienteServiceImpl implements ClienteService {
 		return clientes;
 	}
 
-//	private Cliente verificaSeENulo(Integer id) {
-//		Cliente cliente = clienteRepository.findOne(id);
-//
-//		if (cliente == null) {
-//			throw new ObjectNotFoundException(
-//					"Objeto não encontrado! Id: " + id + ", tipo: " + Cliente.class.getName());
-//		}
-//		return cliente;
-//	}
+	// private Cliente verificaSeENulo(Integer id) {
+	// Cliente cliente = clienteRepository.findOne(id);
+	//
+	// if (cliente == null) {
+	// throw new ObjectNotFoundException(
+	// "Objeto não encontrado! Id: " + id + ", tipo: " +
+	// Cliente.class.getName());
+	// }
+	// return cliente;
+	// }
+
+	@Override
+	public Cliente gravar(Cliente cliente) {
+		cliente.setId(null);
+		clienteRepository.save(cliente);
+		enderecoRepository.save(cliente.getEnderecos());
+		return cliente;
+	}
 
 	@Override
 	public Cliente alterar(Cliente cliente) {
@@ -63,7 +84,6 @@ public class ClienteServiceImpl implements ClienteService {
 		alterarData(newCli, cliente);
 		return clienteRepository.save(newCli);
 	}
-
 
 	@Override
 	public void deleta(Integer id) {
@@ -90,5 +110,28 @@ public class ClienteServiceImpl implements ClienteService {
 	private void alterarData(Cliente newCli, Cliente cliente) {
 		newCli.setNome(cliente.getNome());
 		newCli.setEmail(cliente.getEmail());
+	}
+
+	@Override
+	public Cliente paraDTO(ClienteNewDTO clienteNewDTO) {
+		
+		Cliente cli = new Cliente(null, clienteNewDTO.getNome(), clienteNewDTO.getEmail(), clienteNewDTO.getCpfOuCnpj(),
+				TipoCliente.toEnum(clienteNewDTO.getTipo()));
+		
+		Cidade cid = cidadeRepository.findOne(clienteNewDTO.getCidadeId());
+		
+		Endereco end = new Endereco(null, clienteNewDTO.getLogradouro(), clienteNewDTO.getNumero(),
+				clienteNewDTO.getComplemento(), clienteNewDTO.getBairro(), clienteNewDTO.getCep(), cli, cid);
+		
+		cli.getEnderecos().add(end);
+		cli.getTelefones().add(clienteNewDTO.getTelefone1());
+		if (clienteNewDTO.getTelefone2() != null) {
+			cli.getTelefones().add(clienteNewDTO.getTelefone2());
+		}
+		if (clienteNewDTO.getTelefone3() != null) {
+			cli.getTelefones().add(clienteNewDTO.getTelefone3());
+		}
+		
+		return cli;
 	}
 }
