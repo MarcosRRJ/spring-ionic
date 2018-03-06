@@ -9,4 +9,6 @@ public interface PedidoService {
 	public List<Pedido> find();
 
 	public Pedido bucar(Integer id);
+
+	public Pedido gravar(Pedido pedido);
 }

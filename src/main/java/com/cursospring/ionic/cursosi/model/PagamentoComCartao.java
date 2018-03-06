@@ -3,8 +3,10 @@ package com.cursospring.ionic.cursosi.model;
 import javax.persistence.Entity;
 
 import com.cursospring.ionic.cursosi.model.enums.EstadoPagamento;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 
 @Entity
+@JsonTypeName("pagamentoComCartao")
 public class PagamentoComCartao extends Pagamento {
 
 	private static final long serialVersionUID = 1L;
