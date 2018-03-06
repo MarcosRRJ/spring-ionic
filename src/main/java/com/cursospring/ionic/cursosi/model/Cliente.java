@@ -15,6 +15,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 
 import com.cursospring.ionic.cursosi.model.enums.TipoCliente;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -25,7 +26,9 @@ public class Cliente implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+//	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "cli_seq")
+	@SequenceGenerator(sequenceName = "cli_seq", allocationSize = 1, name = "cli_seq")
 	private Integer id;
 	private String nome;
 	

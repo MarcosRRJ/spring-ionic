@@ -8,6 +8,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
 
 @Entity
 public class Cidade implements Serializable {
@@ -15,7 +16,9 @@ public class Cidade implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+//	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "cat_seq")
+	@SequenceGenerator(sequenceName = "cat_seq", allocationSize = 1, name = "cat_seq")
 	private Integer id;
 	private String nome;
 

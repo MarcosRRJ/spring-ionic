@@ -14,6 +14,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.SequenceGenerator;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -23,7 +24,9 @@ public class Pedido implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+//	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ped_seq")
+	@SequenceGenerator(sequenceName = "ped_seq", allocationSize = 1, name = "ped_seq")
 	private Integer id;
 	
 	@JsonFormat(pattern="dd/MM/yyyy hh:mm")
