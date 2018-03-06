@@ -50,13 +50,13 @@
 			<artifactId>spring-boot-devtools</artifactId>
 		</dependency>
 
-	<!-- 	<dependency>
+	 	<dependency>
 			<groupId>oracle</groupId>
 			<artifactId>ojdbc6</artifactId>
 			<version>10.2.0.4.0</version>
 			<scope>system</scope>
 			<systemPath>${pom.basedir}/src/main/webapp/WEB-INF/lib/ojdbc6-10.2.0.4.0.jar</systemPath>
-		</dependency> -->
+		</dependency> 
 
 		<!-- postgresql -->
 		<dependency>
