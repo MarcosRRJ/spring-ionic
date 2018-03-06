@@ -10,10 +10,12 @@ import com.cursospring.ionic.cursosi.model.ItemPedido;
 import com.cursospring.ionic.cursosi.model.PagamentoComBoleto;
 import com.cursospring.ionic.cursosi.model.Pedido;
 import com.cursospring.ionic.cursosi.model.enums.EstadoPagamento;
+import com.cursospring.ionic.cursosi.repository.ClienteRepository;
 import com.cursospring.ionic.cursosi.repository.ItemPedidoRepository;
 import com.cursospring.ionic.cursosi.repository.PagamentoRepository;
 import com.cursospring.ionic.cursosi.repository.PedidoRepository;
 import com.cursospring.ionic.cursosi.repository.ProdutoRepository;
+import com.cursospring.ionic.cursosi.service.EmailService;
 import com.cursospring.ionic.cursosi.service.PedidoService;
 import com.cursospring.ionic.cursosi.service.exceptions.ObjectNotFoundException;
 
@@ -34,6 +36,12 @@ public class PedidoServiceImpl implements PedidoService {
 
 	@Autowired
 	private ItemPedidoRepository itemPedidoRepository;
+
+	@Autowired
+	private ClienteRepository clienteRepository;
+
+	@Autowired
+	private EmailService emailService;
 
 	@Override
 	public Pedido bucar(Integer id) {
@@ -65,6 +73,8 @@ public class PedidoServiceImpl implements PedidoService {
 		pedido.setId(null);
 		pedido.setInstante(new Date());
 
+		pedido.setCliente(clienteRepository.findOne(pedido.getCliente().getId()));
+
 		pedido.getPagamento().setEstado(EstadoPagamento.PENDENTE);
 		pedido.getPagamento().setPedido(pedido);
 
@@ -78,12 +88,16 @@ public class PedidoServiceImpl implements PedidoService {
 
 		for (ItemPedido ip : pedido.getItens()) {
 			ip.setDesconto(0.0);
-			ip.setPreco(produtoRepository.findOne(ip.getProduto().getId()).getPreco());
+			ip.setProduto(produtoRepository.findOne(ip.getProduto().getId()));
+			ip.setPreco(ip.getProduto().getPreco());
 			ip.setPedido(pedido);
 		}
 
 		itemPedidoRepository.save(pedido.getItens());
+		System.out.println(pedido);
 
+		emailService.sendOrderConfimationEmail(pedido);
+		
 		return pedido;
 	}
 
