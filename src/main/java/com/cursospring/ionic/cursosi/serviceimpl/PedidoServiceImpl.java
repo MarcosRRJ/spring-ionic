@@ -96,7 +96,7 @@ public class PedidoServiceImpl implements PedidoService {
 		itemPedidoRepository.save(pedido.getItens());
 		System.out.println(pedido);
 
-		emailService.sendOrderConfimationEmail(pedido);
+		emailService.sendOrderConfirmationHtmlEmail(pedido);
 		
 		return pedido;
 	}
