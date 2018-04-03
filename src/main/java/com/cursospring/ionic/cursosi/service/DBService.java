@@ -20,6 +20,7 @@ import com.cursospring.ionic.cursosi.model.PagamentoComCartao;
 import com.cursospring.ionic.cursosi.model.Pedido;
 import com.cursospring.ionic.cursosi.model.Produto;
 import com.cursospring.ionic.cursosi.model.enums.EstadoPagamento;
+import com.cursospring.ionic.cursosi.model.enums.Perfil;
 import com.cursospring.ionic.cursosi.model.enums.TipoCliente;
 import com.cursospring.ionic.cursosi.repository.CategoriaRepository;
 import com.cursospring.ionic.cursosi.repository.CidadeRepository;
@@ -122,16 +123,21 @@ public class DBService {
 		cidadeRepository.save(Arrays.asList(c1, c2, c3));
 
 		Cliente cli1 = new Cliente(null, "Maria Silva", "marcosrrj2@gmail.com", "36378912377", TipoCliente.PESSOAFISICA, bp.encode("123") );
-
 		cli1.getTelefones().addAll(Arrays.asList("27363323", "9383893"));
 
+		Cliente cli2 = new Cliente(null, "Ana Costa", "marcos@gmail.com", "87280336477", TipoCliente.PESSOAFISICA, bp.encode("123") );
+		cli2.addPerfil(Perfil.ADMIN);
+		cli2.getTelefones().addAll(Arrays.asList("54489632","942552990"));
+		
 		Endereco e1 = new Endereco(null, "Rua Flores", "300", "Apto 303", "Jardim", "38220834", cli1, c1);
 		Endereco e2 = new Endereco(null, "Av Mattos", "105", "Sala 800", "Centro", "38777012", cli1, c2);
+		Endereco e3 = new Endereco(null, "Av Floriano", "2106", null, "Centro", "08762120", cli2, c2);
 
 		cli1.getEnderecos().addAll(Arrays.asList(e1, e2));
+		cli2.getEnderecos().addAll(Arrays.asList(e3));
 
-		clienteRepository.save(Arrays.asList(cli1));
-		enderecoRepository.save(Arrays.asList(e1, e2));
+		clienteRepository.save(Arrays.asList(cli1, cli2));
+		enderecoRepository.save(Arrays.asList(e1, e2, e3));
 
 		SimpleDateFormat dft = new SimpleDateFormat("dd/MM/yyyy hh:mm");
 
