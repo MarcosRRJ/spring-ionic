@@ -26,6 +26,12 @@ public class ClienteDTO implements Serializable {
 	public ClienteDTO() {
 
 	}
+	
+	public ClienteDTO(Integer id,String nome, String email) {
+		this.id = id;
+		this.nome = nome;
+		this.email = email;
+	}
 
 	public ClienteDTO(Cliente obj) {
 		id = obj.getId();

@@ -21,6 +21,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.cursospring.ionic.cursosi.dto.ClienteDTO;
 import com.cursospring.ionic.cursosi.dto.ClienteNewDTO;
 import com.cursospring.ionic.cursosi.model.Cliente;
+import com.cursospring.ionic.cursosi.repository.ClienteRepository;
 import com.cursospring.ionic.cursosi.service.ClienteService;
 
 @RestController
@@ -29,6 +30,9 @@ public class ClienteController {
 
 	@Autowired
 	private ClienteService clienteService;
+	
+	@Autowired
+	private ClienteRepository repo;
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> bucar(@PathVariable Integer id) {
@@ -71,6 +75,15 @@ public class ClienteController {
 		List<Cliente> clientes = clienteService.burcarTodos();
 		List<ClienteDTO> liesDto = clientes.stream()
 				.map(obj -> new ClienteDTO(obj)).collect(Collectors.toList());
+		
+		return ResponseEntity.ok().body(liesDto);
+	}
+	
+	@RequestMapping(value = "/nomeEmail", method = RequestMethod.GET)
+	public ResponseEntity<List<ClienteDTO>> listarNomeEmail() {
+
+		List<ClienteDTO> liesDto = repo.findNomeAndEmail().stream()
+				.map(obj -> new ClienteDTO(obj.getId(),obj.getNome(), obj.getEmail())).collect(Collectors.toList());
 		
 		return ResponseEntity.ok().body(liesDto);
 	}
