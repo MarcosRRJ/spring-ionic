@@ -15,11 +15,14 @@ import com.cursospring.ionic.cursosi.dto.ClienteNewDTO;
 import com.cursospring.ionic.cursosi.model.Cidade;
 import com.cursospring.ionic.cursosi.model.Cliente;
 import com.cursospring.ionic.cursosi.model.Endereco;
+import com.cursospring.ionic.cursosi.model.enums.Perfil;
 import com.cursospring.ionic.cursosi.model.enums.TipoCliente;
 import com.cursospring.ionic.cursosi.repository.CidadeRepository;
 import com.cursospring.ionic.cursosi.repository.ClienteRepository;
 import com.cursospring.ionic.cursosi.repository.EnderecoRepository;
+import com.cursospring.ionic.cursosi.security.UserSS;
 import com.cursospring.ionic.cursosi.service.ClienteService;
+import com.cursospring.ionic.cursosi.service.exceptions.AuthorizationException;
 import com.cursospring.ionic.cursosi.service.exceptions.DataIntegrityException;
 import com.cursospring.ionic.cursosi.service.exceptions.ObjectNotFoundException;
 
@@ -41,6 +44,12 @@ public class ClienteServiceImpl implements ClienteService {
 	@Override
 	public Cliente bucar(Integer id) {
 
+		UserSS user = UserService.authenticated();
+		
+		if (user == null || !user.hashRole(Perfil.ADMIN) && !id.equals(user.getId())) {
+			throw new AuthorizationException("Acesso Negado");
+		}
+		
 		Cliente cliente = clienteRepository.findOne(id);
 
 		if (cliente == null) {

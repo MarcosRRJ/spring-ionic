@@ -9,6 +9,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import com.cursospring.ionic.cursosi.service.exceptions.AuthorizationException;
 import com.cursospring.ionic.cursosi.service.exceptions.DataIntegrityException;
 import com.cursospring.ionic.cursosi.service.exceptions.ObjectNotFoundException;
 
@@ -45,5 +46,12 @@ public class ControllerExceptionHandler {
 
 	}
 	
+	@ExceptionHandler(AuthorizationException.class)
+	public ResponseEntity<StandarError> authorization(AuthorizationException e, HttpServletRequest request) {
+
+		StandarError err = new StandarError(HttpStatus.FORBIDDEN.value(), e.getMessage(), System.currentTimeMillis());
+		return ResponseEntity.status(HttpStatus.FORBIDDEN).body(err);
+
+	}
 	
 }
