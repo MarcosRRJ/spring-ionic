@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -61,7 +62,8 @@ public class ClienteController {
 
 		return ResponseEntity.noContent().build();
 	}
-
+	
+	@PreAuthorize("hasAnyRole('ADMIN')")
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<Void> deleta(@PathVariable Integer id) {
 
@@ -69,6 +71,7 @@ public class ClienteController {
 		return ResponseEntity.noContent().build();
 	}
 	
+	@PreAuthorize("hasAnyRole('ADMIN')")
 	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity<List<ClienteDTO>> listar() {
 
@@ -79,6 +82,7 @@ public class ClienteController {
 		return ResponseEntity.ok().body(liesDto);
 	}
 	
+	@PreAuthorize("hasAnyRole('ADMIN')")
 	@RequestMapping(value = "/nomeEmail", method = RequestMethod.GET)
 	public ResponseEntity<List<ClienteDTO>> listarNomeEmail() {
 
@@ -88,6 +92,7 @@ public class ClienteController {
 		return ResponseEntity.ok().body(liesDto);
 	}
 	
+	@PreAuthorize("hasAnyRole('ADMIN')")
 	@RequestMapping(value="/pagina", method = RequestMethod.GET)
 	public ResponseEntity<Page<ClienteDTO>> listarPagina(@RequestParam(value="page" , defaultValue="0") Integer page, 
 			@RequestParam(value="linesPerPage" , defaultValue="24") Integer linesPerPage,
